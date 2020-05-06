@@ -7,23 +7,23 @@ if (!is_numeric($_POST['id'])){
 }
 $id = $_POST['id'];
 /*******************************************************************
-CWE                 89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')
+CWE                 	89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')
 
-Описание			Присутствует возможность внедрения SQL-инъекции при обращении к id. 
-					Можно подобрать id другого пользователя внедрением команды:
-					1' OR 1=1 -- в таком случе получим доступ к уже существующему id.
+Описание		Присутствует возможность внедрения SQL-инъекции при обращении к id. 
+			Можно подобрать id другого пользователя внедрением команды:
+			1' OR 1=1 -- в таком случе получим доступ к уже существующему id.
 
 Решение проблемы 	Нельзя брать данные напрямую в запросе, необходима из проверка на валидность. 
-					1)Можно воспользоваться  функцией 
-					mysql_real_escape_string(). 
-					Данная функция требует установить соединение с БД, перед использованием.
+			1)Можно воспользоваться  функцией 
+			mysql_real_escape_string(). 
+			Данная функция требует установить соединение с БД, перед использованием.
 
-					$db->query("SELECT * FROM tournaments WHERE id='%i', 
-								mysql_real_escape_string($id),
+			$db->query("SELECT * FROM tournaments WHERE id='%i', 
+						mysql_real_escape_string($id),
 					);
-					2)Можно задать переменной $id заведомо только числовое значение: $id = (int)$_POST['id'];
+			2)Можно задать переменной $id заведомо только числовое значение: $id = (int)$_POST['id'];
 
-Источник: 			https://www.php.net/mysql_real_escape_string
+Источник: 		https://www.php.net/mysql_real_escape_string
 */
 $sql = $db->query("SELECT * FROM tournaments WHERE id = '$id'");
 $game = array();
