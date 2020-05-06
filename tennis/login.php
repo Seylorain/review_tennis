@@ -3,12 +3,12 @@
 CWE  				98: Improper Control of Filename for Include/Require Statement in PHP Program ('PHP Remote File Inclusion')
 
 Описание: 			Ошибка связана с прямым использованием функций: 
-					include_once('db.php')
-					Можно сформировать hhtp запрос таким образом, что удастся внедрить php модуль с чужого хостинга.
+				include_once('db.php')
+				Можно сформировать hhtp запрос таким образом, что удастся внедрить php модуль с чужого хостинга.
 
-Решение проблемы: 	1)	Нумеровать модули следующем образом: “module1.php”, ”module2.php” …”module<n>.php”
-						Преобразовать $module в числовой формат (settype($module,”integer”)) 
-					2) 	Использовать конструкцию switch-case.
+Решение проблемы: 		1)Нумеровать модули следующем образом: “module1.php”, ”module2.php” …”module<n>.php”
+				Преобразовать $module в числовой формат (settype($module,”integer”)) 
+				2) Использовать конструкцию switch-case.
 					switch ($case) // $case - имя переменной передаваемой в параметре к скрипту
 					{
 						case news:
@@ -22,7 +22,8 @@ CWE  				98: Improper Control of Filename for Include/Require Statement in PHP P
 						default:
 						include("index.php"); // если в переменной $case не будет передано значение, которое учтено выше, то открывается главная страница
 						break;
-					}			 
+					}
+					
 Источник: 			http://www.realcoding.net/articles/php-include-uyazvimost-ot-teorii-k-praktike.html
 */
 include_once('db.php');
@@ -56,19 +57,19 @@ CWE                 307: Improper Restriction of Excessive Authentication Attemp
 	exit (json_encode(array('success' => false, "msg" => "Длина логина не может превышать 20 символов.")));
 
 /*******************************************************************
-CWE                 89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')
+CWE                 	89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')
 
-Описание			Присутствует возможность внедрения SQL-инъекции при обращении к login.
-					Можно применить следующую SQL - инъекцию:
-					user' OR 1=1 -- и тогда любой логин будет верен.
+Описание		Присутствует возможность внедрения SQL-инъекции при обращении к login.
+			Можно применить следующую SQL - инъекцию:
+			user' OR 1=1 -- и тогда любой логин будет верен.
 
 Решение проблемы 	Нельзя брать данные напрямую в запросе, необходима из проверка на валидность. Можно воспользоваться функцией
-					mysql_real_escape_string(). 
-					Данная функция требует установить соединение с БД, перед использованием.
+			mysql_real_escape_string(). 
+			Данная функция требует установить соединение с БД, перед использованием.
 
-					$db->query("SELECT name FROM users WHERE user='%s', 
-								mysql_real_escape_string($l)
-					);
+			$db->query("SELECT name FROM users WHERE user='%s', 
+					mysql_real_escape_string($l)
+				);
 
 Источник: 			https://www.php.net/mysql_real_escape_string	 	    
 */
@@ -87,19 +88,19 @@ CWE                 89: Improper Neutralization of Special Elements used in an S
 
  $pass = hash('sha256', $s1.$p.$time.$s2);
 /*******************************************************************
-CWE                 89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')
+CWE                 	89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')
 
-Описание			Присутствует возможность внедрения SQL-инъекции при обращении к login.
-					Можно применить следующую SQL - инъекцию:
-					user' OR 1=1 -- и тогда любой логин будет верен, а пароль будет отброшен во время аутентификации.
+Описание		Присутствует возможность внедрения SQL-инъекции при обращении к login.
+			Можно применить следующую SQL - инъекцию:
+			user' OR 1=1 -- и тогда любой логин будет верен, а пароль будет отброшен во время аутентификации.
 
 Решение проблемы 	Нельзя брать данные напрямую в запросе, необходима из проверка на валидность. Можно воспользоваться  функцией
-					mysql_real_escape_string(). 
-					Данная функция требует установить соединение с БД, перед использованием.
+			mysql_real_escape_string(). 
+			Данная функция требует установить соединение с БД, перед использованием.
 
-					$db->query("SELECT name FROM users WHERE user='%s' AND password='%s', 
-								mysql_real_escape_string($l),
-            					mysql_real_escape_string($pass)
+			$db->query("SELECT name FROM users WHERE user='%s' AND password='%s', 
+					mysql_real_escape_string($l),
+            				mysql_real_escape_string($pass)
 					);
 
 Источник: 			https://www.php.net/mysql_real_escape_string
