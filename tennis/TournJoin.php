@@ -3,12 +3,12 @@
 CWE  				98: Improper Control of Filename for Include/Require Statement in PHP Program ('PHP Remote File Inclusion')
 
 Описание: 			Ошибка связана с прямым использованием функций: 
-					include_once('db.php')
-					Можно сформировать hhtp запрос таким образом, что удастся внедрить php модуль с чужого хостинга.
+				include_once('db.php')
+				Можно сформировать hhtp запрос таким образом, что удастся внедрить php модуль с чужого хостинга.
 
-Решение проблемы: 	1)	Нумеровать модули следующем образом: “module1.php”, ”module2.php” …”module<n>.php”
-						Преобразовать $module в числовой формат (settype($module,”integer”)) 
-					2) 	Использовать конструкцию switch-case.
+Решение проблемы: 		1)Нумеровать модули следующем образом: “module1.php”, ”module2.php” …”module<n>.php”
+				Преобразовать $module в числовой формат (settype($module,”integer”)) 
+				2) Использовать конструкцию switch-case.
 					switch ($case) // $case - имя переменной передаваемой в параметре к скрипту
 					{
 						case news:
@@ -22,7 +22,8 @@ CWE  				98: Improper Control of Filename for Include/Require Statement in PHP P
 						default:
 						include("index.php"); // если в переменной $case не будет передано значение, которое учтено выше, то открывается главная страница
 						break;
-					}			 
+					}
+					
 Источник: 			http://www.realcoding.net/articles/php-include-uyazvimost-ot-teorii-k-praktike.html
 */
 include_once('db.php');
@@ -38,23 +39,23 @@ $uid = $user['id'];
 if (!is_numeric($id))
 	exit(json_encode(array('success' => false, 'msg' => 'Опять что-то плохое пытаешься сделать?')));
 /*******************************************************************
-CWE                 89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')
+CWE                 	89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')
 
-Описание			Присутствует возможность внедрения SQL-инъекции при обращении к id. 
-					Можно подобрать id другого пользователя внедрением команды:
-					1' OR 1=1 -- в таком случе получим доступ к уже существующему id.
+Описание		Присутствует возможность внедрения SQL-инъекции при обращении к id. 
+			Можно подобрать id другого пользователя внедрением команды:
+			1' OR 1=1 -- в таком случе получим доступ к уже существующему id.
 
 Решение проблемы 	Нельзя брать данные напрямую в запросе, необходима из проверка на валидность. 
-					1)Можно воспользоваться  функцией 
-					mysql_real_escape_string(). 
-					Данная функция требует установить соединение с БД, перед использованием.
+			1)Можно воспользоваться  функцией 
+			mysql_real_escape_string(). 
+			Данная функция требует установить соединение с БД, перед использованием.
 
-					$db->query("SELECT * FROM tournaments WHERE id='%i', 
-								mysql_real_escape_string($id),
+			$db->query("SELECT * FROM tournaments WHERE id='%i', 
+						mysql_real_escape_string($id),
 					);
-					2)Можно задать переменной $id заведомо только числовое значение: $id = (int)$_POST['id'];
+			2)Можно задать переменной $id заведомо только числовое значение: $id = (int)$_POST['id'];
 
-Источник: 			https://www.php.net/mysql_real_escape_string
+Источник: 		https://www.php.net/mysql_real_escape_string
 */
 $sql = $db->query("SELECT player_amount, players, payment, rtMin, rtMax, pool FROM tournaments WHERE id = '$id'");
 if ($sql->rowCount() == 0)
@@ -73,23 +74,23 @@ if ($user['balance'] < $game['payment'])
 if (($user['rating'] < $game['rtMin']) || ($user['rating'] > $game['rtMax']))
 	exit(json_encode(array('success' => false, 'msg' => 'Твой рейтинг не подходит для вступления в данную игру.')));
 /*******************************************************************
-CWE                 89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')
+CWE                 	89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')
 
-Описание			Присутствует возможность внедрения SQL-инъекции при обновлении информации о пользователе. 
-					Можно присвоить результат 
-					1' OR 1=1 -- в таком случе получим доступ к уже существующему id.
+Описание		Присутствует возможность внедрения SQL-инъекции при обновлении информации о пользователе. 
+			Можно присвоить результат 
+			1' OR 1=1 -- в таком случе получим доступ к уже существующему id.
 
 Решение проблемы 	Нельзя брать данные напрямую в запросе, необходима из проверка на валидность. 
-					1)Можно воспользоваться  функцией 
-					mysql_real_escape_string(). 
-					Данная функция требует установить соединение с БД, перед использованием.
+			1)Можно воспользоваться  функцией 
+			mysql_real_escape_string(). 
+			Данная функция требует установить соединение с БД, перед использованием.
 
-					$db->query("SELECT * FROM tournaments WHERE id='%i', 
-								mysql_real_escape_string($id),
+			$db->query("SELECT * FROM tournaments WHERE id='%i', 
+					mysql_real_escape_string($id),
 					);
-					2)Можно задать переменной $id заведомо только числовое значение: $id = (int)$_POST['id'];
+			2)Можно задать переменной $id заведомо только числовое значение: $id = (int)$_POST['id'];
 
-Источник: 			https://www.php.net/mysql_real_escape_string
+Источник: 		https://www.php.net/mysql_real_escape_string
 */
 
 $db->exec("UPDATE users SET balance = balance - $payment WHERE id = '$uid'");
